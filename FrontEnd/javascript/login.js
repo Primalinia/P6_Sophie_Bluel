@@ -1,15 +1,16 @@
+
+
+// Message d'erreur
 const errorConnexion = document.createElement("div");
 const loginForm = document.querySelector("form");
 loginForm.appendChild(errorConnexion);
 
 
 
-
-
 //* SELECTION DES LIENS DU HEADER  (MODIFICATION ESPACE ET FONT) //
 const links = document.querySelectorAll("header ul a");
 links.forEach(link => {
-    link.setAttribute("style", "margin-right: 44px; font-size: 16px; text-decoration: none;");
+    link.setAttribute("style", "margin-right: 44px; font-size: 16px; text-decoration: none");
 });
 
 const elements = document.querySelectorAll('.connexionForm, .submitBtn');
@@ -64,10 +65,11 @@ element.submit.addEventListener("click", (a) => {
                 errorConnexion.style.marginTop = "20px";
                 setTimeout(() => {
                     errorConnexion.style.visibility = "hidden"
-                },3000)
+                },5000)
             } else {
                 sessionStorage.setItem("isConnected", JSON.stringify(true));
                 window.location.replace("index.html");
             }
         })
 });
+
