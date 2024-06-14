@@ -53,10 +53,15 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0
+}
+
+.modifier-icon {  
+	fill: #fff;
 }
 section {
 	margin: 50px 0
@@ -84,12 +89,14 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
 
 }
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
@@ -124,7 +131,33 @@ li:hover {
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
+	margin-right: 31px
 }
+
+.title{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.modifierIcon{
+	margin-bottom: 2em;
+	cursor: pointer;
+}
+
+.modifier{
+	margin-bottom: 2em;
+}
+
+.modifyIcon2{
+	width: 15px;
+	height: 15px;
+	margin-right: 10px;
+	margin-bottom: 2em;
+	cursor: pointer;
+	filter: invert();/*je modifie la couleur de mon icone*/ 
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -137,17 +170,21 @@ li:hover {
 	width: 100%;
 
 }
+
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
+
 #contact > * {
 	text-align: center;
 
 }
+
 #contact h2{
 	margin-bottom: 20px;
 }
+
 #contact form {
 	text-align: left;
 	margin-top:30px;
@@ -164,6 +201,7 @@ margin: auto;
 #contact label {
 	margin: 2em 0 1em 0;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -218,9 +256,14 @@ footer nav ul {
 	display: none;
 }
 
+
 /**** LOGIN ****/
 body{
 	background-color: rgba(255,254,248,255);
+}
+.contact{
+	text-decoration: none;
+	color: inherit;
 }
 
 #login{
@@ -228,13 +271,17 @@ body{
 }
 
 
+.loginDisplay{
+	text-decoration: none;
+	color: inherit;
+}
+
 #connexion{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	height: 450px;
 	margin-top: 100px;
-
 }
 
 #connexion h2{
@@ -293,68 +340,245 @@ body{
 	text-decoration: underline;
 }
 
-/*admin*/
 
-#admin-logged{
+/*Modal*/
+#modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
 	width: 100%;
-	background-color: black;
+	height: 100%;
+	overflow: auto;
+	
+}
+/* MODAL1*/
+#modal-content {
+	background-color: #fff;
+	margin: 15% auto;
+	padding:20px;
+	border: 1px solid #888;
+	border-radius: 10px;
+	width: 80%;
+	max-width: 630px;
+	text-align: center;
+	position: relative;
+	max-height: 688px;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	margin-top: 0px;
-	height: 50px;
 }
 
-#logo-edition{
-	display: flex;
-	align-items: baseline;
+#modal-content h2{
+	color: black;
+	margin-top: 20px;
+	font-weight: lighter;
 }
 
-#admin-logged i{
-	font-size: 1.1em;
-	color: white;
 
-}
-#admin-logged p{
-	color: white;
-	margin-left: 5px;
+#modal-close {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	background: none;
+	border: none;
+	padding: 0;
 }
 
-#admin-logged button{
-	margin-left: 15px;
-	border-radius: 60px ;
-	padding: 9px 20px 9px 20px;
-	font-family: 'Work Sans';
-	font-weight: 600;
+#modal-close i {
+	font-size: 1.3em;
+	display: block;
+}
+
+
+
+.gallery-modal {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(3, auto);
+	grid-row-gap: 29px;
+	grid-column-gap: 9px;
+	margin: 40px 80px 0px 80px;
+	padding-bottom: 30px;
+	border-bottom: solid 2px #d0d0d0;
+}
+
+.gallery-modal figure {
+    position: relative;
+	height: 135px;
+}
+
+.gallery-modal img {
+	max-width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+#new-photo{
+	font-family: 'Syne';
+    font-weight: 700;
+    color: white;
+    background-color: #1D6154;
+    padding: 10px 25px 10px 25px;
+    width: 230px;
+    text-align: center;
+    border-radius: 60px;
 	border-width: 0px;
+    margin-top: 30px;
+	cursor: pointer;
 }
 
-#figure-modify{
+.gallery-modal figure i {
+    position: absolute;
+    color: white;
+    top: 3px;
+    right: 3px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    padding: 4px;
+    background-color: black;
+    border: none;
+	border-radius: 5px;
+}
+
+/*MODAL2 (ajout de photos)*/
+
+#modal-photo {
+	max-width: 628px;
+	background-color: #fff;
+	margin: 15% auto;
+	border: 1px solid #888;
+	border-radius: 10px;
+	text-align: center;
+	position: relative;
+	height: 668px;
 	display: flex;
-	width: 80%;
-	margin: auto;
-	margin-top: 15px;
+	flex-direction: column;
+	align-items: center;
 }
 
-#figure-modify-a{
+#modal-photo h2{
+	color: black;
+	margin-top: 58px;
+	font-weight: lighter;
+}
+
+#modal-return {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 21px;
+	height: 21px;
+	cursor: pointer;
+	background: none;
+	border: none;
+	padding: 0;
+}
+
+#modal-return i {
+	font-size: 1.5em;
+	display: block;
+}
+
+#modal-photo-close {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	width: 21px;
+	height: 21px;
+	cursor: pointer;
+	background: none;
+	border: none;
+	padding: 0;
+}
+
+#modal-photo-close i {
+	font-size: 1.5em;
+	display: block;
+	
+}
+
+#modal-photo form{
 	display: flex;
-	width: 80%;
-	margin-bottom: 10px;
+	flex-direction: column;
+	padding: 30px 100px 30px 100px
 }
 
-#figure-modify i{
-	font-size: 1.2em;
-}
-
-
-#portfolio-modify{
+#form-photo-div{
+	max-width: 420px;
+	height: 169px;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
-	align-items: baseline;
+    align-items: center;
+	background-color: #e8f1f6;
 }
 
-#portfolio-modify i{
-	margin-left: 30px;
-	font-size: 1.2em;
+.fa-image:before {
+    content: "\f03e";
+    font-size: 5.4em;
+	margin-top: 13px;
 }
 
+#iModalImage.fa-image{
+	margin-top: 370px;
+	
+}
+
+#label-image{
+	padding: 10px 33px 10px 33px;
+	background-color: #cbd6dc;
+	margin-top: 6px;
+	border-radius: 25px;
+	color: #376b89;
+	cursor: pointer;
+}
+
+#form-photo-div p {
+	font-size: 0.9em;
+	color: #575859;
+	margin-top: 7px;
+	margin-bottom: 19px;
+}
+
+.modal-photo-input{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-top: 25px;
+	align-items: start;
+}
+
+#modal-photo-category, #modal-photo-title{
+	width: 100%;
+    height: 51px;
+    box-shadow: 0px 0px 15px rgb(233, 233, 228);
+    border-width: 0px;
+    margin-top: 21px;
+	
+}
+
+#barre-grise{
+	width: 100%;
+	padding-bottom: 45px;
+	border-bottom: solid 2px #d0d0d0;
+}
+
+#modal-valider{
+	font-family: 'Syne';
+    font-weight: 700;
+    color: white;
+    background-color: #6f717099;
+    padding: 10px 25px 10px 25px;
+    width: 237px;
+	border-width: 0px;
+    text-align: center;
+    border-radius: 60px;
+    margin-top: 30px;
+	cursor: pointer;
+}

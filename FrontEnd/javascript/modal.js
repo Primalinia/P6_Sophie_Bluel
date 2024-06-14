@@ -4,17 +4,9 @@ const modal = document.querySelector('#modal');
 const modalContent = document.querySelector('#modal-content');
 const modalPhoto = document.querySelector('#modal-photo');
 const modalClose = document.querySelector('#modal-close');
+const showModal = () => (modal.style.display = 'block');
+const hideModal = () => (modal.style.display = 'none');
 
-
-
-
-function showModal() {
-    modal.style.display = 'block';
-}
-
-function hideModal() {
-    modal.style.display = 'none';
-}
 
 modalContent.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -29,8 +21,7 @@ modalClose.addEventListener('click', hideModal);
 modal.addEventListener('click', hideModal);
 
 
-//Ajouter le bouton photo//
-
+//Ajoute le bouton photo//
 const newPhotoBtn = document.querySelector('#new-photo');
 const returnBtn = document.querySelector('#modal-return');
 const modalPhotoClose = document.querySelector("#modal-photo-close");
@@ -39,6 +30,7 @@ const modalPhotoClose = document.querySelector("#modal-photo-close");
 newPhotoBtn.addEventListener('click', function () {
     modalContent.style.display = 'none';
     modalPhoto.style.display = 'block';
+    selectedCategory();
 });
 
 returnBtn.addEventListener('click', function () {
@@ -49,9 +41,7 @@ returnBtn.addEventListener('click', function () {
 modalPhotoClose.addEventListener('click', hideModal);
 
 
-
-//Ajouter des travaux au Modal//
-
+//Ajoute des travaux au Modal//
 const imagesModalContainer = document.querySelector('.gallery-modal')
 
 function createModalWorkFigure(work) {
@@ -131,12 +121,12 @@ function deleteWorkById(workId) {
 //Contrôle si le formulaire est rempli//
 
 const titleInput = document.getElementById('modal-photo-title');
-const categorySelect = document.getElementById('modal-photo-category');
+const categorySelected = document.getElementById('modal-photo-category');
 const imageInput = document.getElementById('image');
 const submitButton = document.getElementById('modal-valider');
 
 function checkForm() {
-    if (titleInput.value !== '' && categorySelect.value !== '' && imageInput.value !== '') {
+    if (titleInput.value !== '' && categorySelected.value !== '' && imageInput.value !== '') {
         submitButton.style.backgroundColor = '#1D6154';
     } else {
         submitButton.style.backgroundColor = '';
@@ -144,16 +134,29 @@ function checkForm() {
 }
 
 titleInput.addEventListener('input', checkForm);
-categorySelect.addEventListener('change', checkForm);
+categorySelected.addEventListener('change', checkForm);
 imageInput.addEventListener('change', checkForm);
 
 
 //Ajoute un nouveau travail//
 
-const btnValider = document.getElementById("modal-valider");
-btnValider.addEventListener("click", addNewWork);
 
-function addNewWork(event) {
+
+
+const selectedCategory = () => {
+    categorySelected.innerHTML = ""; //On verifie que la balise select est vide
+    let option = document.createElement("option");
+    categorySelected.appendChild(option); // On ajoute une option vide par defaut dans la balise select
+    const allCategoriesWithoutTous = allCategories.filter((el)=> el.id !== 0);
+    allCategoriesWithoutTous.forEach((category) => {
+        let option = document.createElement("option"); // On créé une nouvelle option pour chaque categorie
+        option.value = category.name;
+        option.innerHTML = category.name;
+        option.id = category.id;
+        categorySelected.appendChild(option);
+    })
+}
+const addNewWork = (event) => {
     event.preventDefault();
 
     const token = sessionStorage.getItem("Token");
@@ -199,10 +202,13 @@ function addNewWork(event) {
             const galleryModal = document.querySelector('.gallery-modal');
             galleryModal.appendChild(figureModal);
 
-            alert('Le nouvel travail a été ajouté avec succès.');
+            alert('La photo a été ajoutée avec succès.');
         })
         .catch(error => console.error(error));
 }
+
+const btnValider = document.getElementById("modal-valider");
+btnValider.addEventListener("click", addNewWork);
 
 //Aperçu de l'image//
 const inputImage = document.getElementById("image");
