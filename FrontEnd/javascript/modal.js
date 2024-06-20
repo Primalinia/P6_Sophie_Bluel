@@ -8,40 +8,27 @@ const showModal = () => (modal.style.display = 'block');
 const hideModal = () => (modal.style.display = 'none');
 
 
-modalContent.addEventListener('click', function (e) {
-    e.stopPropagation();
-});
-modalPhoto.addEventListener('click', function (e) {
-    e.stopPropagation();
-});
-
 modalClose.addEventListener('click', hideModal);
-
 
 modal.addEventListener('click', hideModal);
 
 
-//Ajoute le bouton photo//
-const newPhotoBtn = document.querySelector('#new-photo');
-const returnBtn = document.querySelector('#modal-return');
-const modalPhotoClose = document.querySelector("#modal-photo-close");
 
 
-newPhotoBtn.addEventListener('click', function () {
-    modalContent.style.display = 'none';
-    modalPhoto.style.display = 'block';
-    selectedCategory();
-});
 
-returnBtn.addEventListener('click', function () {
-    modalContent.style.display = 'flex';
-    modalPhoto.style.display = 'none';
-})
+//&* Affiche la Modale au click sur " modifier ""
+modifier.addEventListener("click", showModal);
 
-modalPhotoClose.addEventListener('click', hideModal);
+fetch('http://localhost:5678/api/works')
+    .then((response) => response.json())
+    .then((data) => {  // traitement des données
+        data.forEach((work) => {
+            const figure = createModalWorkFigure(work);
+            imagesModalContainer.appendChild(figure);
+        });
+    });
 
-
-//Ajoute des travaux au Modal//
+//&*  Ajout des images modal 1 //
 const imagesModalContainer = document.querySelector('.gallery-modal')
 
 function createModalWorkFigure(work) {
@@ -57,9 +44,11 @@ function createModalWorkFigure(work) {
     deleteIcon.className = "fa-regular fa-trash-can"
 
     figure.appendChild(figureImage)
-    
+
     figure.appendChild(deleteIcon)
 
+
+    
     // Ajoute une fonctionnalité de suppression d'événement lors du clic sur l'icône "supprimer"
     deleteIcon.addEventListener('click', (event) => {
         event.preventDefault();
@@ -69,23 +58,10 @@ function createModalWorkFigure(work) {
     return figure;
 }
 
-// Affiche la Modale au click sur le bouton modifier
-modifier.addEventListener("click", showModal);
-
-fetch('http://localhost:5678/api/works')
-    .then((response) => response.json())
-    .then((data) => {
-        data.forEach((work) => {
-            const figure = createModalWorkFigure(work);
-            imagesModalContainer.appendChild(figure);
-        });
-    });
-
-
-//Supprimer le travail//
+//!Supprimer les images//
 function deleteWorkById(workId) {
     const token = sessionStorage.getItem("Token");
-    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce travail ?");
+    const confirmation = confirm("Êtes-vous sûr de vouloir supprimer cette image ?");
     if (confirmation) {
         fetch(`http://localhost:5678/api/works/${workId}`, {
             method: 'DELETE',
@@ -96,7 +72,7 @@ function deleteWorkById(workId) {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new error('La supression du travai à echoué.');
+                    throw new error('La supression de l\'image à echoué.');
                 }
                 const modalWorkToRemove = document.querySelector(`figure[data-id="${workId}"]`);
                 if (modalWorkToRemove) {
@@ -118,17 +94,43 @@ function deleteWorkById(workId) {
 
 
 
-//Contrôle si le formulaire est rempli//
+//--------- MODAL 2 //
+
+const newPhotoBtn = document.querySelector('#new-photo'); //Ajoute le bouton photo//
+const returnBtn = document.querySelector('#modal-return');
+const modalPhotoClose = document.querySelector('#modal-photo-close');
+
+// Changement de modal 1 --> modal 2
+newPhotoBtn.addEventListener('click', function () {
+    modalContent.style.display = 'none';
+    modalPhoto.style.display = 'block';
+    selectedCategory();
+});
+
+newPhotoBtn.addEventListener("click", () => showModal(modalPhoto));
+
+modalContent.addEventListener('click', (e) => e.stopPropagation());
+
+modalPhoto.addEventListener('click', (e) => e.stopPropagation());
+
+
+
+
+//&* Contrôle si le formulaire est rempli//
 
 const titleInput = document.getElementById('modal-photo-title');
 const categorySelected = document.getElementById('modal-photo-category');
 const imageInput = document.getElementById('image');
 const submitButton = document.getElementById('modal-valider');
 
-function checkForm() {
-    if (titleInput.value !== '' && categorySelected.value !== '' && imageInput.value !== '') {
-        submitButton.style.backgroundColor = '#1D6154';
-    } else {
+// vérifie si les trois entrées ont une valeur non vide
+function checkForm() { 
+    //Si tous les champs ont une valeur non vide
+    if (titleInput.value !== '' && categorySelected.value !== '' && imageInput.value !== '') { 
+        // Définir la couleur de fond du bouton de soumission
+        submitButton.style.backgroundColor = '#1D6154'; 
+    } else { 
+        // Sinon, définir la couleur de fond du bouton de soumission sur une valeur vide
         submitButton.style.backgroundColor = '';
     }
 }
@@ -138,16 +140,13 @@ categorySelected.addEventListener('change', checkForm);
 imageInput.addEventListener('change', checkForm);
 
 
-//Ajoute un nouveau travail//
 
-
-
-
+//*Ajoute une nouvelle image //
 const selectedCategory = () => {
     categorySelected.innerHTML = ""; //On verifie que la balise select est vide
     let option = document.createElement("option");
     categorySelected.appendChild(option); // On ajoute une option vide par defaut dans la balise select
-    const allCategoriesWithoutTous = allCategories.filter((el)=> el.id !== 0);
+    const allCategoriesWithoutTous = allCategories.filter((el) => el.id !== 0);
     allCategoriesWithoutTous.forEach((category) => {
         let option = document.createElement("option"); // On créé une nouvelle option pour chaque categorie
         option.value = category.name;
@@ -210,7 +209,7 @@ const addNewWork = (event) => {
 const btnValider = document.getElementById("modal-valider");
 btnValider.addEventListener("click", addNewWork);
 
-//Aperçu de l'image//
+//&* Aperçu de l'image//
 const inputImage = document.getElementById("image");
 const labelImage = document.getElementById("label-image");
 const pImage = document.querySelector("#form-photo-div > p");
@@ -223,10 +222,11 @@ inputImage.addEventListener("change", function () {
     imgPreview.src = URL.createObjectURL(selectedImage);
     imgPreview.style.maxHeight = "100%";
     imgPreview.style.width = "auto";
-
+        // Cache les éléments existants
     labelImage.style.display = "none";
     pImage.style.display = "none";
     inputImage.style.display = "none";
     iModalImage.style.display = "none";
+        // Ajoute la prévisualisation de l'image en tant que nouvel enfant de #form-photo-div 
     document.getElementById("form-photo-div").appendChild(imgPreview);
 });

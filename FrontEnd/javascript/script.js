@@ -5,26 +5,42 @@ const modifier = document.querySelector(".modifier")
 let allWorks = []// initialisation du tableau
 let allCategories = [];
 
-//MODE Edition////
-// Sélectionne le header HTML
+//----- MODE Edition------ //
 const header = document.querySelector("header");
 
-// Permet de masquer dynamiquement le "Mode édition"
-function adjustHeaderMargin() {
-    // Si la variable isConnect est définie à false (l'utilisateur n'est pas connecté), on applique un display:none sur le header
-    if (!isConnect) {
-        header.style.display = "none";
-        return;
+    // Masque dynamiquement le "Mode édition"
+let isConnect = true;
+const modif = document.querySelector("h3.modifier");
+modifier.addEventListener("click", function () {
+    if (isConnect) {
+        isConnect = true;
+        console.log("Mode édition : connecté");
+    } else {
+        isConnect = false;
     }
-    // Sinon, on applique un style spécifique au header
-    header.style.margin = "97px 0 0 0";
-    console.log( adjustHeaderMargin);
+    adjustHeaderMargin();
+});
+
+function adjustHeaderMargin() {
+    if (isConnect) {
+        header.style.margin = "97px 0 0 0";
+    } else {
+        header.style.margin = "50px 0 0 0";
+    }
 }
 
-// Crée la div "mode Edition"
+// La Div "Mode édition" disparait
+const span = document.getElementById("modal-close");
+span.addEventListener("click", function () {
+    modeEdition.style.display = "none";
+    isConnect = false;    console.log("Mode édition : déconnecté");
+    });
+
+    
+    // Crée la div "mode Edition"
 const modeEdition = document.createElement("div");
 
-// Défini l'ID et le style de la div
+    // Défini l'ID et le style de la div
 modeEdition.setAttribute("id", "modeEdition");
 modeEdition.style.display = "none";
 modeEdition.style.flexDirection = "row-reverse";
@@ -39,7 +55,7 @@ modeEdition.style.top = "0px";
 modeEdition.style.left = "0px";
 modeEdition.style.zIndex = "999";
 
-// Ajoute du texte à la div
+    // Ajout du texte à la div
 const modeEditionText = document.createElement("span");
 modeEditionText.textContent = "Mode édition";
 modeEditionText.style.display = "flex";
@@ -49,40 +65,28 @@ modeEditionText.style.height = "19px";
 modeEditionText.style.justifyContent = "center";
 modeEdition.appendChild(modeEditionText);
 
-// Crée l'icône "modifier"
+    // Crée l'icône "modifier"
 const modifierIcon = document.createElement("img");
 modifierIcon.src = "./assets/icons/modifier.svg";
 modifierIcon.alt = "modifier";
 modifierIcon.style.display = "flex";
 modifierIcon.style.color = "white";
 modeEdition.appendChild(modifierIcon);
-
-// Ajoute la div à la page web
-document.body.appendChild(modeEdition);
-
-// Déterminera si l'utilisateur est connecté ou pas
-const isConnect = true;
-
-// Appelle la fonction pour ajuster le margin en fonction de l'état de connexion
-adjustHeaderMargin();
-console.log(isConnect ? "Utilisateur connecté" : "Utilisateur non connecté");
-
-// Sélectionne l'élément ayant la classe CSS ".modifier"
+document.body.appendChild(modeEdition);// Ajoute la div à la page web
+adjustHeaderMargin();// Ajuste le margin en fonction de l'état de connexion
 const modifierSpan = document.querySelector(".modifier");
-
-// Ajoute un écouteur d'événement pour détecter les clics sur l'élément
 modifierSpan.addEventListener("click", () => {
     modeEdition.style.display = "flex";
 });
 
 
 
-// fonction asynchrone qui récupère les données de l'API via la méthode HTTP GET
+//&*   Je récupère les données de l'API via la méthode GET //
 const getWorks = async () => {
     try {//ouvre un bloc try qui permet de gérer une exception
         const response = await fetch('http://localhost:5678/api/works') //envoyer une requête pour récupérer les données de l'API
         const works = await response.json();
-        console.log("Tous les works sont", works);
+        console.log("Tous les works sont:", works);
         allWorks = works;
         for (let work of allWorks) {
             const figure = createWorkFigure(work);
@@ -94,7 +98,7 @@ const getWorks = async () => {
 }
 getWorks()
 
-// Je créer une représentation visuelle pour chaque travail (work) dans la galerie
+// Je créer une représentation visuelle pour chaque img (work) dans la galerie
 const createWorkFigure = (work) => {
     const figure = document.createElement("figure");
     const img = document.createElement("img");
@@ -106,8 +110,9 @@ const createWorkFigure = (work) => {
     figure.appendChild(figcaption);
     return figure;
 }
+
 // Accent grave : ` 
-// On récupère toutes les categories de l'API
+//&* On récupère toutes les categories de l'API //
 const API = 'http://localhost:5678/api/categories'
 const getCategories = async () => {
     try {
@@ -119,7 +124,7 @@ const getCategories = async () => {
         })
         console.log(data);
         allCategories = data;
-        console.log("La liste des categories est", allCategories);
+        console.log("La liste des categories est:", allCategories);
         for (let category of data) {
             const button = document.createElement("button");
             button.innerHTML = category.name;
@@ -133,7 +138,7 @@ const getCategories = async () => {
 };
 getCategories()
 
-// Afficher dans la galerie les travaux en fonction de la catégorie sélectionnée
+//&* FILTRE - Affichage des images en fonction de la catégorie sélectionnée
 const filterWorksByCategory = (categoryId) => {
     gallery.innerHTML = "";// on vide la gallerie pour commencer
     if (categoryId === 0) {
@@ -143,14 +148,15 @@ const filterWorksByCategory = (categoryId) => {
             gallery.appendChild(figure);
         }
     } else {
+        // Sinon, la fonction filtre uniquement les travaux qui correspondent à la catégorie sélectionnée
         const filteredWorks = allWorks.filter((work) => work.categoryId === categoryId);
         for (let work of filteredWorks) {
             const figure = createWorkFigure(work);
             gallery.appendChild(figure);
+            console.log('Affiche les images par catégorie');
         }
     }
 }
-console.log(filterWorksByCategory);
 
 categoriesContainer.addEventListener("click", (event) => {
     const buttons = document.querySelectorAll(".categories button");
@@ -167,10 +173,11 @@ categoriesContainer.addEventListener("click", (event) => {
     }
 })
 
-// Vérifie si une connexion existe, esi oui, affichera LOGOUT 
+
+//&*   LOGIN <---> LOGOUT 
 const token = sessionStorage.getItem("Token");
 console.log("Le Token récupéré est", token);
-let isConnected = true;
+let isConnected = false;
 
 if (token) {
     isConnected = true;
@@ -178,4 +185,7 @@ if (token) {
 
 if (isConnected) {
     log.innerHTML = "logout";
+} else {
+    log.innerHTML = "login";
 }
+console.log("Login :", isConnected);

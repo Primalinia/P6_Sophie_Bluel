@@ -147,6 +147,7 @@ li:hover {
 
 .modifier{
 	margin-bottom: 2em;
+	cursor: pointer;
 }
 
 .modifyIcon2{
@@ -364,7 +365,7 @@ body{
 	max-width: 630px;
 	text-align: center;
 	position: relative;
-	max-height: 688px;
+	height: 688px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
