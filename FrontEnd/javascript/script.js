@@ -29,14 +29,19 @@ function adjustHeaderMargin() {
     }
 }
 
-// La Div "Mode édition" disparait
-const span = document.getElementById("modal-close");
-span.addEventListener("click", function () {
+// La Div "Mode édition" disparait 
+const span1 = document.getElementById("modal-close");
+const span2 = document.getElementById("modal-photo-close");
+// Modal 1
+span1.addEventListener("click", function () {
     modeEdition.style.display = "none";
-    isConnect = false;    console.log("Mode édition : déconnecté");
+    isConnect = false;    console.log("Mode édition Modal 1 : déconnecté");
     });
-
-    
+// Modal 2
+span2.addEventListener("click", function () {
+    modeEdition.style.display = "none";
+    isConnect = false;    console.log("Mode édition Modal 2: déconnecté");
+    });   
     // Crée la div "mode Edition"
 const modeEdition = document.createElement("div");
 

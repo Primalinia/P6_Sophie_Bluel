@@ -116,6 +116,9 @@ modalContent.addEventListener('click', (e) => e.stopPropagation());
 
 modalPhoto.addEventListener('click', (e) => e.stopPropagation());
 
+modalPhotoClose.addEventListener('click', hideModal);
+
+
 //!  Retour de modal 2 --> modal 1
 returnBtn.addEventListener('click', function () {
     modalContent.style.display = 'block';
@@ -225,7 +228,7 @@ const addNewWork = (event) => {
         .then(work => {
             //ccréer une nouvelle œuvre et l'ajouter à la galerie//
             const figure = createWorkFigure(work);
-            const gallery = document.querySelector('.gallery');
+            const gallery = document.querySelector('.gallery'); // Galerie Html
             gallery.appendChild(figure);
 
             //créer une nouvelle œuvre et l'ajouter à la modal gallery//
