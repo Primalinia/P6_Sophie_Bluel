@@ -520,6 +520,12 @@ body{
 	background-color: #e8f1f6;
 }
 
+#preview {
+	width: 30%;
+	height: 100%;
+	object-fit: cover;
+}
+
 .fa-image:before {
     content: "\f03e";
     font-size: 5.4em;
@@ -538,6 +544,8 @@ body{
 	border-radius: 25px;
 	color: #376b89;
 	cursor: pointer;
+	position: relative;
+	
 }
 
 #form-photo-div p {

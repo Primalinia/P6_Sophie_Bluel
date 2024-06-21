@@ -6,7 +6,9 @@ const modalPhoto = document.querySelector('#modal-photo');
 const modalClose = document.querySelector('#modal-close');
 const showModal = () => (modal.style.display = 'block');
 const hideModal = () => (modal.style.display = 'none');
-
+const imagePreview = document.querySelector('#preview');
+const addButton = document.querySelector('#label-image');
+const iModalImage = document.querySelector('#iModalImage');
 
 modalClose.addEventListener('click', hideModal);
 
@@ -58,7 +60,7 @@ function createModalWorkFigure(work) {
     return figure;
 }
 
-//!Supprimer les images//
+// Supprimer des images //
 function deleteWorkById(workId) {
     const token = sessionStorage.getItem("Token");
     const confirmation = confirm("Êtes-vous sûr de vouloir supprimer cette image ?");
@@ -100,6 +102,7 @@ const newPhotoBtn = document.querySelector('#new-photo'); //Ajoute le bouton pho
 const returnBtn = document.querySelector('#modal-return');
 const modalPhotoClose = document.querySelector('#modal-photo-close');
 
+
 // Changement de modal 1 --> modal 2
 newPhotoBtn.addEventListener('click', function () {
     modalContent.style.display = 'none';
@@ -113,35 +116,14 @@ modalContent.addEventListener('click', (e) => e.stopPropagation());
 
 modalPhoto.addEventListener('click', (e) => e.stopPropagation());
 
+//!  Retour de modal 2 --> modal 1
+returnBtn.addEventListener('click', function () {
+    modalContent.style.display = 'block';
+    modalPhoto.style.display = 'none';
+});
 
 
-
-//&* Contrôle si le formulaire est rempli//
-
-const titleInput = document.getElementById('modal-photo-title');
-const categorySelected = document.getElementById('modal-photo-category');
-const imageInput = document.getElementById('image');
-const submitButton = document.getElementById('modal-valider');
-
-// vérifie si les trois entrées ont une valeur non vide
-function checkForm() { 
-    //Si tous les champs ont une valeur non vide
-    if (titleInput.value !== '' && categorySelected.value !== '' && imageInput.value !== '') { 
-        // Définir la couleur de fond du bouton de soumission
-        submitButton.style.backgroundColor = '#1D6154'; 
-    } else { 
-        // Sinon, définir la couleur de fond du bouton de soumission sur une valeur vide
-        submitButton.style.backgroundColor = '';
-    }
-}
-
-titleInput.addEventListener('input', checkForm);
-categorySelected.addEventListener('change', checkForm);
-imageInput.addEventListener('change', checkForm);
-
-
-
-//*Ajoute une nouvelle image //
+//  Créer les categories de la balise select //
 const selectedCategory = () => {
     categorySelected.innerHTML = ""; //On verifie que la balise select est vide
     let option = document.createElement("option");
@@ -155,6 +137,55 @@ const selectedCategory = () => {
         categorySelected.appendChild(option);
     })
 }
+
+/* Vérifie si les trois champs du formulaire ont des valeurs non vides ; si oui,
+la couleur de fond du bouton de soumission est modifiée pour indiquer qu'il est possible de le soumettre.*/
+const titleInput = document.getElementById('modal-photo-title');
+const categorySelected = document.getElementById('modal-photo-category');
+const imageInput = document.getElementById('image');
+const submitButton = document.getElementById('modal-valider');
+
+// vérifie si les trois entrées ont une valeur non vide
+function checkForm() { 
+    //Si tous les champs ont une valeur non vide
+    if (titleInput.value !== '' && categorySelected.value !== '' && imageInput.value !== '') { 
+        // Défini la couleur de fond du bouton de soumission
+        submitButton.style.backgroundColor = '#1D6154'; 
+    } else { 
+        // Sinon, défini la couleur de fond du bouton de soumission sur une valeur vide
+        submitButton.style.backgroundColor = '';
+    }
+}
+
+titleInput.addEventListener('input', checkForm);
+categorySelected.addEventListener('change', checkForm);
+imageInput.addEventListener('change', checkForm);
+
+// Prévisualisation de l'image
+imageInput.addEventListener('change', (event) =>{
+    const file = event.target.files[0];
+    console.log('Fichier sélectionné:', file);
+    const ACCEPTED_EXTENSIONS = ['png', 'jpg'];
+    // On met le nom du fichier dans une variable
+    const fileName = file.name;
+    console.log('Nom du fichier sélectionné:', fileName);
+    const extension = fileName.split('.').pop().toLowerCase();
+    //On vérifie l'extension et la taille des images uploadées
+    if (file &&
+        file.size <= 4 * 1024 * 1024 &&
+        ACCEPTED_EXTENSIONS.includes(extension)) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block'; // Afficher la prévisualisation de l'image
+            addButton.style.display = 'none'; // Masquer le bouton "Ajouter photo"
+            iModalImage.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert('Erreur lors du chargement de l\'image');
+    }
+})
 const addNewWork = (event) => {
     event.preventDefault();
 
@@ -164,12 +195,13 @@ const addNewWork = (event) => {
     const category = document.getElementById("modal-photo-category").value;
     const image = document.getElementById("image").files[0];
 
-
+// Verifie si tous les champs sont remplis, sinon => alert
     if (!title || !category || !image) {
         alert('Veuillez remplir tous les champs du formulaire.')
         return;
     }
 
+    
     //Vérifie si l'image ne dépasse pas 4 Mo//
     if (image.size > 4 * 1024 * 1024) {
         alert("La taille de l'image ne doit pas dépasser 4 Mo.");
@@ -208,25 +240,3 @@ const addNewWork = (event) => {
 
 const btnValider = document.getElementById("modal-valider");
 btnValider.addEventListener("click", addNewWork);
-
-//&* Aperçu de l'image//
-const inputImage = document.getElementById("image");
-const labelImage = document.getElementById("label-image");
-const pImage = document.querySelector("#form-photo-div > p");
-const iconeImage = document.querySelector("#iModalImage");
-
-inputImage.addEventListener("change", function () {
-    const selectedImage = inputImage.files[0];
-
-    const imgPreview = document.createElement("img");
-    imgPreview.src = URL.createObjectURL(selectedImage);
-    imgPreview.style.maxHeight = "100%";
-    imgPreview.style.width = "auto";
-        // Cache les éléments existants
-    labelImage.style.display = "none";
-    pImage.style.display = "none";
-    inputImage.style.display = "none";
-    iModalImage.style.display = "none";
-        // Ajoute la prévisualisation de l'image en tant que nouvel enfant de #form-photo-div 
-    document.getElementById("form-photo-div").appendChild(imgPreview);
-});
