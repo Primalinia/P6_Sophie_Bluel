@@ -1,7 +1,7 @@
 const gallery = document.querySelector(".gallery")
 const categoriesContainer = document.querySelector(".categories")
 const log = document.querySelector(".loginDisplay")
-const modifier = document.querySelector(".modifier")
+const modifier = document.querySelector("h3.modifier")
 let allWorks = []// initialisation du tableau
 let allCategories = [];
 
@@ -10,7 +10,7 @@ const header = document.querySelector("header");
 
     // Masque dynamiquement le "Mode édition"
 let isConnect = true;
-const modif = document.querySelector("h3.modifier");
+
 modifier.addEventListener("click", function () {
     if (isConnect) {
         isConnect = true;
@@ -79,8 +79,8 @@ modifierIcon.style.color = "white";
 modeEdition.appendChild(modifierIcon);
 document.body.appendChild(modeEdition);// Ajoute la div à la page web
 adjustHeaderMargin();// Ajuste le margin en fonction de l'état de connexion
-const modifierSpan = document.querySelector(".modifier");
-modifierSpan.addEventListener("click", () => {
+
+modifier.addEventListener("click", () => {
     modeEdition.style.display = "flex";
 });
 

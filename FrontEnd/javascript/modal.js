@@ -1,14 +1,24 @@
 //MODAL//
 
 const modal = document.querySelector('#modal');
-const modalContent = document.querySelector('#modal-content');
-const modalPhoto = document.querySelector('#modal-photo');
+const modalContent = document.querySelector('#modal-content');// Premiere Modale
+const modalPhoto = document.querySelector('#modal-photo');// Deuxieme Modale
 const modalClose = document.querySelector('#modal-close');
-const showModal = () => (modal.style.display = 'block');
-const hideModal = () => (modal.style.display = 'none');
+
 const imagePreview = document.querySelector('#preview');
 const addButton = document.querySelector('#label-image');
 const iModalImage = document.querySelector('#iModalImage');
+
+const showModal = () => {
+   
+    modal.style.display = 'block';
+   modalContent.style.display = 'block';
+};
+
+const hideModal = () => {
+    modal.style.display = 'none'; 
+  modalPhoto.style.display ='none' 
+}
 
 modalClose.addEventListener('click', hideModal);
 
@@ -110,7 +120,6 @@ newPhotoBtn.addEventListener('click', function () {
     selectedCategory();
 });
 
-newPhotoBtn.addEventListener("click", () => showModal(modalPhoto));
 
 modalContent.addEventListener('click', (e) => e.stopPropagation());
 
@@ -195,7 +204,7 @@ const addNewWork = (event) => {
     const token = sessionStorage.getItem("Token");
 
     const title = document.getElementById("modal-photo-title").value;
-    const category = document.getElementById("modal-photo-category").value;
+    const category = document.getElementById("modal-photo-category").selectedIndex;
     const image = document.getElementById("image").files[0];
 
 // Verifie si tous les champs sont remplis, sinon => alert
@@ -241,5 +250,4 @@ const addNewWork = (event) => {
         .catch(error => console.error(error));
 }
 
-const btnValider = document.getElementById("modal-valider");
-btnValider.addEventListener("click", addNewWork);
+submitButton.addEventListener("click", addNewWork);
