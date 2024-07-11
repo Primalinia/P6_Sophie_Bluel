@@ -190,7 +190,7 @@ imageInput.addEventListener('change', (event) =>{
         const reader = new FileReader();
         reader.onload = function (e) {
             imagePreview.src = e.target.result;
-            imagePreview.style.display = 'block'; // Afficher la prévisualisation de l'image
+            imagePreview.style.display = 'flex'; // Afficher la prévisualisation de l'image
             addButton.style.display = 'none'; // Masquer le bouton "Ajouter photo"
             iModalImage.style.display = 'none';
         };
