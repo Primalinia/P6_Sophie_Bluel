@@ -173,6 +173,7 @@ titleInput.addEventListener('input', checkForm);
 categorySelected.addEventListener('change', checkForm);
 imageInput.addEventListener('change', checkForm);
 
+
 // Prévisualisation de l'image
 imageInput.addEventListener('change', (event) =>{
     const file = event.target.files[0];
