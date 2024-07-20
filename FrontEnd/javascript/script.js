@@ -1,50 +1,41 @@
 const gallery = document.querySelector(".gallery")
 const categoriesContainer = document.querySelector(".categories")
-const log = document.querySelector(".loginDisplay")
+const logButton = document.querySelector(".loginDisplay")
 const modifier = document.querySelector("h3.modifier")
+const modifierIcon2 = document.querySelector(".modifyIcon2")
 let allWorks = []// initialisation du tableau
 let allCategories = [];
-
 //----- MODE Edition------ //
 const header = document.querySelector("header");
-
     // Masque dynamiquement le "Mode édition"
 let isConnect = true;
-
 modifier.addEventListener("click", function () {
     if (isConnect) {
         isConnect = true;
-        console.log("Mode édition : connecté");
     } else {
         isConnect = false;
     }
-    adjustHeaderMargin();
 });
-
-function adjustHeaderMargin() {
+const adjustHeaderMargin = () => {
     if (isConnect) {
         header.style.margin = "97px 0 0 0";
     } else {
         header.style.margin = "50px 0 0 0";
     }
 }
-
-// La Div "Mode édition" disparait 
+// La Div "Mode édition" disparait
 const span1 = document.getElementById("modal-close");
 const span2 = document.getElementById("modal-photo-close");
 // Modal 1
 span1.addEventListener("click", function () {
-    modeEdition.style.display = "none";
     isConnect = false;    console.log("Mode édition Modal 1 : déconnecté");
     });
 // Modal 2
 span2.addEventListener("click", function () {
-    modeEdition.style.display = "none";
     isConnect = false;    console.log("Mode édition Modal 2: déconnecté");
-    });   
+    });
     // Crée la div "mode Edition"
 const modeEdition = document.createElement("div");
-
     // Défini l'ID et le style de la div
 modeEdition.setAttribute("id", "modeEdition");
 modeEdition.style.display = "none";
@@ -59,7 +50,6 @@ modeEdition.style.position = "fixed";
 modeEdition.style.top = "0px";
 modeEdition.style.left = "0px";
 modeEdition.style.zIndex = "999";
-
     // Ajout du texte à la div
 const modeEditionText = document.createElement("span");
 modeEditionText.textContent = "Mode édition";
@@ -69,7 +59,6 @@ modeEditionText.style.width = "129px";
 modeEditionText.style.height = "19px";
 modeEditionText.style.justifyContent = "center";
 modeEdition.appendChild(modeEditionText);
-
     // Crée l'icône "modifier"
 const modifierIcon = document.createElement("img");
 modifierIcon.src = "./assets/icons/modifier.svg";
@@ -79,13 +68,6 @@ modifierIcon.style.color = "white";
 modeEdition.appendChild(modifierIcon);
 document.body.appendChild(modeEdition);// Ajoute la div à la page web
 adjustHeaderMargin();// Ajuste le margin en fonction de l'état de connexion
-
-modifier.addEventListener("click", () => {
-    modeEdition.style.display = "flex";
-});
-
-
-
 //&*   Je récupère les données de l'API via la méthode GET //
 const getWorks = async () => {
     try {//ouvre un bloc try qui permet de gérer une exception
@@ -102,7 +84,6 @@ const getWorks = async () => {
     }
 }
 getWorks()
-
 // Je créer une représentation visuelle pour chaque img (work) dans la galerie
 const createWorkFigure = (work) => {
     const figure = document.createElement("figure");
@@ -115,8 +96,7 @@ const createWorkFigure = (work) => {
     figure.appendChild(figcaption);
     return figure;
 }
-
-// Accent grave : ` 
+// Accent grave : `
 //&* On récupère toutes les categories de l'API //
 const API = 'http://localhost:5678/api/categories'
 const getCategories = async () => {
@@ -136,13 +116,11 @@ const getCategories = async () => {
             button.setAttribute("categoryId", category.id);
             categoriesContainer.appendChild(button);
         }
-
     } catch (error) {
         console.error(error);
     }
 };
 getCategories()
-
 //&* FILTRE - Affichage des images en fonction de la catégorie sélectionnée
 const filterWorksByCategory = (categoryId) => {
     gallery.innerHTML = "";// on vide la gallerie pour commencer
@@ -162,14 +140,12 @@ const filterWorksByCategory = (categoryId) => {
         }
     }
 }
-
 categoriesContainer.addEventListener("click", (event) => {
     const buttons = document.querySelectorAll(".categories button");
     if (event.target.getAttribute("categoryId")) {
         //supprime la classe active filter de tous les boutons
         buttons.forEach((button) => {
             button.classList.remove("active-filter");
-
         })
         const categoryId = parseInt(event.target.getAttribute("categoryId"));
         //on ajoute la classe filter-active au boutton cliqué
@@ -177,20 +153,39 @@ categoriesContainer.addEventListener("click", (event) => {
         filterWorksByCategory(categoryId);
     }
 })
-
-
-//&*   LOGIN <---> LOGOUT 
+//&*   LOGIN <---> LOGOUT
 const token = sessionStorage.getItem("Token");
 console.log("Le Token récupéré est", token);
-let isConnected = false;
-
-if (token) {
-    isConnected = true;
+// Function to update UI based on connection status
+const updateUIBasedOnConnection = () => {
+    let isConnected = false;
+    if (token) {
+        isConnected = true;
+    }
+    logButton.style.cursor = "pointer";
+    if (isConnected) {
+        logButton.innerHTML = "logout";
+        categoriesContainer.style.visibility = "hidden";
+        modeEdition.style.display = "flex";
+        modifier.style.display = "flex";
+    } else {
+        logButton.innerHTML = "login";
+        categoriesContainer.style.visibility = "visible";
+        modeEdition.style.height = "auto";
+        adjustHeaderMargin();
+        modifier.style.display = "none";
+        modifierIcon2.style.display = "none";
+    }
 }
-
-if (isConnected) {
-    log.innerHTML = "logout";
-} else {
-    log.innerHTML = "login";
-}
-console.log("Login :", isConnected);
+// Initial UI update based on connection status
+updateUIBasedOnConnection();
+logButton.addEventListener("click", () => {
+    if (sessionStorage.getItem("Token")) {
+        sessionStorage.removeItem("Token");
+        window.location.href = "index.html";
+    } else {
+        window.location.href = "login.html";
+    }
+    // Update UI after changing the connection status
+    updateUIBasedOnConnection();
+})
