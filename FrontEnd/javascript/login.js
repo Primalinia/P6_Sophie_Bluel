@@ -67,7 +67,6 @@ element.submit.addEventListener("click", (a) => {
                     errorConnexion.style.visibility = "hidden"
                 },5000)
             } else {
-                sessionStorage.setItem("isConnected", JSON.stringify(true));
                 window.location.replace("index.html");
             }
         })
