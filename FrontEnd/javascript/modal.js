@@ -132,6 +132,7 @@ modalPhotoClose.addEventListener('click', hideModal);
 returnBtn.addEventListener('click', function () {
     modalContent.style.display = 'block';
     modalPhoto.style.display = 'none';
+    resetInputs();
 });
 
 
@@ -205,11 +206,12 @@ const addNewWork = (event) => {
     const token = sessionStorage.getItem("Token");
 
     const title = document.getElementById("modal-photo-title").value;
-    const category = document.getElementById("modal-photo-category").selectedIndex;
-    const image = document.getElementById("image").files[0];
+const categoryId = document.getElementById("modal-photo-category").selectedIndex;
+console.log("Categorie contient",categoryId)
+const image = document.getElementById("image").files[0];
 
 // Verifie si tous les champs sont remplis, sinon => alert
-    if (!title || !category || !image) {
+    if (!title || !categoryId || !image) {
         alert('Veuillez remplir tous les champs du formulaire.')
         return;
     }
@@ -223,7 +225,7 @@ const addNewWork = (event) => {
 
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("category", category);
+    formData.append("category", categoryId);
     formData.append("image", image);
 
     fetch("http://localhost:5678/api/works", {
@@ -247,8 +249,15 @@ const addNewWork = (event) => {
             galleryModal.appendChild(figureModal);
 
             alert('La photo a été ajoutée avec succès.');
+            resetInputs();
         })
         .catch(error => console.error(error));
+}
+
+const resetInputs = () => {
+    document.getElementById("modal-photo-title").value = '';
+    document.getElementById("modal-photo-category").value = '';
+    document.getElementById("image").value = '';
 }
 
 submitButton.addEventListener("click", addNewWork);
