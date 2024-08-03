@@ -12,10 +12,12 @@ let isConnect = true;
 modifier.addEventListener("click", function () {
     if (isConnect) {
         isConnect = true;
+
     } else {
         isConnect = false;
     }
 });
+
 const adjustHeaderMargin = () => {
     if (isConnect) {
         header.style.margin = "97px 0 0 0";
@@ -68,6 +70,7 @@ modifierIcon.style.color = "white";
 modeEdition.appendChild(modifierIcon);
 document.body.appendChild(modeEdition);// Ajoute la div à la page web
 adjustHeaderMargin();// Ajuste le margin en fonction de l'état de connexion
+
 //&*   Je récupère les données de l'API via la méthode GET //
 const getWorks = async () => {
     try {//ouvre un bloc try qui permet de gérer une exception

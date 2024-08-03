@@ -8,16 +8,18 @@ const modalClose = document.querySelector('#modal-close');
 const imagePreview = document.querySelector('#preview');
 const addButton = document.querySelector('#label-image');
 const iModalImage = document.querySelector('#iModalImage');
+const backgroundColorMain = document.querySelector('#modal') //Arriere plan apres ouverture de la Modale
 
 const showModal = () => {
    
     modal.style.display = 'block';
-   modalContent.style.display = 'block';
+    modalContent.style.display = 'block';
+    backgroundColorMain.style.background = 'rgba(0, 0, 0, 0.5)'; // L'arriere plan passe en gris
 };
 
 const hideModal = () => {
     modal.style.display = 'none'; 
-  modalPhoto.style.display ='none' 
+    modalPhoto.style.display ='none' 
 }
 
 modalClose.addEventListener('click', hideModal);
